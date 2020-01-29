@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "cordova-plugin-ble-central": "~1.2.4"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-ble": {},
+      "cordova-plugin-whitelist": {}
+    }
+  },
+  "dependencies": {}
+}

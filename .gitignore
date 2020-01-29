@@ -1,0 +1,98 @@
+# AWS Keys
+aws-config.js
+
+# Cordova Global
+vertigo_app/plugins/
+
+# iOS Platform
+vertigo_app/platforms/ios/build/
+vertigo_app/platforms/ios/www/
+vertigo_app/platforms/ios/cordova/console.log
+*.xcuserdatad
+
+# Android Platform
+vertigo_app/platforms/android/.gradle
+vertigo_app/platforms/android/build
+vertigo_app/platforms/android/assets/www
+vertigo_app/platforms/android/local.properties
+vertigo_app/platforms/android/CordovaLib/build
+vertigo_app/platforms/android/CordovaLib/gen
+vertigo_app/platforms/android/CordovaLib/local.properties
+
+# wp8
+vertigo_app/platforms/wp8/bin
+vertigo_app/platforms/wp8/obj
+vertigo_app/platforms/wp8/www
+vertigo_app/platforms/wp8/.staging
+vertigo_app/platforms/wp8/*.suo
+vertigo_app/platforms/wp8/*.csproj.user
+
+# Windows Universal App (Windows Platform)
+vertigo_app/platforms/windows/build
+vertigo_app/platforms/windows/www
+vertigo_app/platforms/windows/AppPackages
+
+# Browser
+vertigo_app/platforms/browser/www
+
+# res
+vertigo_app/resources/signing
+
+# Node JS + TS
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+lib-cov
+coverage
+.nyc_output
+.grunt
+bower_components
+.lock-wscript
+build/Release
+dist/
+node_modules/
+jspm_packages/
+typings/
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
+.env.test
+.cache
+.next
+.nuxt
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+
+# Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+.apdisk
+
+# Windows
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
