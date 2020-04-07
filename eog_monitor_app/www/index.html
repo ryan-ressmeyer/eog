@@ -1,0 +1,374 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+  <script src="components/loader.js"></script>
+  <script src="lib/onsenui/js/onsenui.min.js"></script>
+
+  <link rel="stylesheet" href="components/loader.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
+  <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <link rel="stylesheet" type="text/css" href="lib/Chart.min.css">
+
+  <script type="text/javascript" src="lib/moment.min.js"></script>
+  <script type="text/javascript" src="lib/Chart.min.js"></script>
+
+  <script type="text/javascript" src="lib/canvasjs.min.js"></script>
+  <script type="text/javascript" src="lib/evothings.js"></script>
+  <script type="text/javascript" src="lib/easyble.js"></script>
+  <script type="text/javascript" src="lib/aws-lib.js"></script>
+  <script type="text/javascript" src="lib/aws-config.js"></script>
+  
+  <script type="text/javascript" src="lib/aws-sdk-2.609.0.min.js"></script>
+
+  <script type=text/javascript src="src/app.js"> </script>
+</head>
+
+<body>
+
+  <ons-navigator swipeable id="navigator" page="home.html"></ons-navigator>
+
+  <ons-template id="home.html">
+    <ons-page id="home-page">
+      <ons-splitter>
+        <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
+          <ons-page>
+            <ons-list>
+              <ons-list-item onclick="fn.load('data.html')" tappable>
+                Data
+              </ons-list-item>
+              <ons-list-item onclick="fn.load('eng.html')" tappable>
+                ENG Tests
+              </ons-list-item>
+              <ons-list-item onclick="fn.load('settings.html')" tappable>
+                Settings
+              </ons-list-item>
+              <ons-list-item onclick="fn.load('debug.html')" tappable>
+                Debug
+              </ons-list-item>
+              <ons-list-item onclick="fn.load('contact.html')" tappable>
+                Contact Us
+              </ons-list-item>
+            </ons-list>
+          </ons-page>
+        </ons-splitter-side>
+        <ons-splitter-content id="content" page="home-disconnected.html">
+
+    </ons-page>
+  </ons-template>
+
+  <template id="home-disconnected.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.open()">
+            <ons-icon icon="ion-ios-menu, material:md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Vertigo Monitoring App
+        </div>
+      </ons-toolbar>
+      <div id='home-content'>
+        <p style="text-align: center; opacity: 0.6; padding-top: 10px;">
+          Status: Disconnected
+        </p>
+        <div style="text-align: center;">
+          <ons-button class="center" style="margin: 0 auto; background-color:green" onclick="fn.scanBLE()">
+            Connect </ons-button>
+        </div>
+      </div>
+    </ons-page>
+    </ons-splitter-content>
+    </ons-splitter>
+  </template>
+
+  <template id="home-connected.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.open()">
+            <ons-icon icon="ion-ios-menu, material:md-menu"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Vertigo Monitoring App
+        </div>
+      </ons-toolbar>
+      <div id='home-content'>
+        <p style="text-align: center; opacity: 0.6; padding-top: 10px;">
+          Status: Connected
+        </p>
+        <div style="text-align: center;">
+          <ons-button class="center" style="background-color:red" onclick="app.disconnect()">
+            Disconnect </ons-button>
+          <div style="display: block">
+            <ons-button id='recording-button' class="center" style="margin-top: 20px; background-color:red"
+              onclick="app.toggleRecording()">
+              Not Recording</ons-button>
+          </div>
+          <div id='data-preview' style='width: 100%; height: 400px; margin-top: 20px;'></div>
+        </div>
+      </div>
+    </ons-page>
+    </ons-splitter-content>
+    </ons-splitter>
+  </template>
+
+  <ons-template id="connect.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.stopScan()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+      </ons-toolbar>
+      <ons-list id='ble-devices'>
+
+      </ons-list>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="data.html">
+    <ons-page id = "data-page">
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Data
+        </div>
+      </ons-toolbar>
+      <ons-button onclick="fn.updateChart();"> Update </ons-button>
+      <div style="width:100%; height:200px;" id="channel-1"> </div>
+      <div style="width:100%; height:200px;" id="channel-2"> </div>
+      <div style="width:100%; height:200px;" id="channel-3"> </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="eng.html">
+    <ons-page id="eng-page">
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          ENG Tests
+        </div>
+      </ons-toolbar>
+      <ons-list>
+        <ons-list-item onclick="fn.load('saccades-info.html')" tappable>
+          Saccades
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('pursuit-info.html')" tappable>
+          Smooth Pursuit
+        </ons-list-item>
+        <ons-list-item onclick="fn.load('optokinetics-info.html')" tappable>
+          Optokinetic
+        </ons-list-item>
+      </ons-list>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="settings.html">
+    <ons-page id="settings">
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Settings
+        </div>
+      </ons-toolbar>
+      <label for="name">Name</label>
+      <ons-input id="name-input" input-id="name" float></ons-input>
+      <div style="width: 100%; text-align: center;">
+      <ons-button onclick="app.save()">Save</ons-button>
+      </div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="debug.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Debug
+        </div>
+      </ons-toolbar>
+      <ons-button onclick="app.awsTest()">Test AWS</ons-button>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id="contact.html">
+    <ons-page>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="center">
+          Contact
+        </div>
+      </ons-toolbar>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id = "saccades-info.html">
+    <ons-page id='saccades-info-page'>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="right">
+          <ons-toolbar-button onclick="fn.load('saccades.html')">
+            Start
+          </ons-toolbar-button>
+        </div> 
+      </ons-toolbar>
+      
+      <h3 style = "text-align: center;"> Saccades Instructions </h3>
+      <ol>
+        <li>
+          Press start. A countdown from 5 will start.<br>
+        </li>
+        <li>
+          Before the countdown completes, hold the phone horizontally about 6 inches from your face at eye level. <br>
+        </li>
+        <li>
+          The Saccades animation will look like a series of black dots appearing against a white background. Please focus on
+          the shown dot as it moves randomly around the screen. <br>
+        </li>
+        <li>
+          Press Start on the toolbar to begin.
+        </li>
+      </ol>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id = "saccades.html">
+    <ons-page id='saccades-page'>
+      <div id = 'saccades-body' style="width: 100%; height: 100%;"></div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id = "pursuit-info.html">
+    <ons-page id='pursuit-info-page'>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="right">
+          <ons-toolbar-button onclick="fn.load('pursuit.html')">
+            Start
+          </ons-toolbar-button>
+        </div> 
+      </ons-toolbar>
+      
+      <h3 style = "text-align: center;"> Smooth Pursuit Instructions </h3>
+      <ol>
+        <li>
+          Press start. A countdown from 5 will begin.<br>
+        </li>
+        <li>
+          Before the countdown completes, hold the phone horizontally about 6 inches from your face at eye level. <br>
+        </li>
+        <li>
+          The Smooth Pursuit animation will look like a black dot moving back and forth white background. Please focus on
+          the shown dot as it moves across the screen. <br>
+        </li>
+        <li>
+          Press Start on the toolbar to begin.
+        </li>
+      </ol>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id = "pursuit.html">
+    <ons-page id='pursuit-page'>
+      <div id = 'pursuit-body' style="width: 100%; height: 100%;"></div>
+    </ons-page>
+
+  </ons-template>
+
+  <ons-template id = "optokinetics-info.html">
+    <ons-page id='optokinetic-info-page'>
+      <ons-toolbar>
+        <div class="left">
+          <ons-toolbar-button onclick="fn.back()">
+            <ons-icon icon="fa-arrow-left"></ons-icon>
+          </ons-toolbar-button>
+        </div>
+        <div class="right">
+          <ons-toolbar-button onclick="fn.load('optokinetics.html')">
+            Start
+          </ons-toolbar-button>
+        </div> 
+      </ons-toolbar>
+      
+      <h3 style = "text-align: center;"> Optokinetics Instructions </h3>
+      <ol>
+        <li>
+          Press start. A countdown from 5 will start.
+        </li>
+        <li>
+          Before the countdown completes, hold the phone horizontally about 6 inches from your face at eye level.
+        </li>
+        <li>
+          The Optokinetic animation will look like a series of black bars moving against a white background. 
+          While it is playing, please focus on a bar as long as you can until it moves off the screen.
+        </li>
+        <li>
+          Then, move your eyes to track another bar earlier on the screen.
+        </li>
+        <li>
+          Press Start on the toolbar to begin.
+        </li>
+      </ol>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id = "optokinetics.html">
+    <ons-page id='optokinetic-page'>
+      <div id = 'optokinetic-body' style="width: 100%; height: 100%;"></div>
+    </ons-page>
+  </ons-template>
+
+  <ons-template id = "eng-complete.html">
+      <ons-page id='eng-complete-page'>
+        <ons-toolbar>
+          <div class="left">
+            <ons-toolbar-button onclick="fn.home()">
+              <ons-icon icon="fa-arrow-left"></ons-icon>
+            </ons-toolbar-button>
+          </div>
+        </ons-toolbar>
+        <h2 style="text-align: center;"> ENG Test Complete! </h2>
+      </ons-page>
+  </ons-template>
+</body>
+
+</html>

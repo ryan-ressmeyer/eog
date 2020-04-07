@@ -1,61 +1,3 @@
-/*
-var aws_config = {
-	accessKeyId: 'AKIAYB5UOS3R2XUYAFKO',
-	secretAccessKey: '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',
-	region: 'us-west-2',
-	params: { FunctionName: 'IOT0816-IoTAPI-EIB20168G5O' }
-}
-
-class aws {
-    constructor(config) {
-        this.config = config;
-        this.lambda = new AWS.Lambda(this.config);
-    }
-
-    update(sensorid, value, success, error)
-    {
-        var params = {
-            Payload: JSON.stringify({
-                operation: 'update',
-                sensorid: sensorid,
-                value: value })
-            }
-        this.lambda.invoke(
-            params,
-            function(err, data) {
-                if (err) {
-                    error && error(err)
-                }
-                else {
-                    success && success(data)
-                }
-            }
-        )
-    }
-
-    query(sensorid, success, error)
-    {
-        var params = {
-            Payload: JSON.stringify({
-                operation: 'query',
-                sensorid: sensorid })
-            }
-            this.lambda.invoke(
-            params,
-            function(err, data) {
-                if (err) {
-                    error && error(err)
-                }
-                else {
-                    var items = JSON.parse(data.Payload).Items
-                    success && success(items)
-                }
-            }
-        )
-    }
-
-}
-*/
 // this is RedBear Lab's UART service
 var redbear = {
     serviceUUID: "713D0000-503E-4C75-BA94-3148F18D941E",
@@ -125,14 +67,14 @@ var app = {
         //app.aws = new aws(aws_config);
         evothings.aws.initialize(evothings.aws.config);
 
-        
         app.chartRefresh = setInterval(function(){
-            if ($.mobile.activePage.attr( "id" ) == "connected") {
+            if ($.mobile.activePage.attr( "id" ) == "connected" && app.analog_enabled) {
                 for (var i = 0; i < app.channelCharts.length; i++) {
                     app.channelCharts[i].render();
                 }
             }
         }, 100);
+        app.name = "Test_Device";
     },
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
@@ -220,6 +162,13 @@ var app = {
             default:
                 break; 
         }
+
+        evothings.aws.update(app.name+type.toFixed(0), number.toFixed(1), function(succ){
+            console.log('Successfully uploaded '+ succ +' to AWS!');
+        }, function(err){
+            console.log("Error uploading to AWS :(");
+            console.log(err)
+        });
         // 0x0B -> data
         // 0x0E -> button
     },
@@ -294,7 +243,7 @@ var app = {
         console.log("ERROR: " + reason)
         alert("ERROR: " + reason); // real apps should use notification.alert
     },
-    test: function() {
+    awsTest: function() {
         /*
         app.aws.update
         */

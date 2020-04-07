@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "cordova-plugin-ble-central": "~1.2.4"
+    "cordova-plugin-ble-central": "^1.2.4"
   },
   "cordova": {
     "plugins": {
@@ -8,5 +8,8 @@
       "cordova-plugin-whitelist": {}
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "cordova-android": "^8.1.0",
+    "onsenui": "^2.10.10"
+  }
 }
